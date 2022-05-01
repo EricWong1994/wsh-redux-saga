@@ -4,11 +4,34 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Carousel from '../../containers/Carousel';
 
-@connect(({ topics, collected }) => ({
-  topics,
-  collected,
-}))
-export default class Home extends React.Component {
+// const mapStateToProps = state => {
+//   topics: state.topics,
+//   collected: state.collected
+// }
+const stateToProps = state => {
+	return {
+    topics: state.topics,
+    collected: state.collected
+	};
+};
+
+// connect(({ topics, collected }) => ({
+//   topics,
+//   collected,
+// }))
+const dispatchToProps = dispatch => {
+	return {
+		inputChange(e) {
+			let action = {
+				type: 'change_input',
+				value: e.target.value,
+			};
+			dispatch(action);
+		},
+	};
+};
+
+class Home extends React.Component {
   componentDidMount() {
     // 获取数据列表
     this.props.dispatch({
@@ -26,6 +49,7 @@ export default class Home extends React.Component {
 
   render() {
     const { topics, collected } = this.props;
+    // console.log('this.props: ', this.props);
     return (
       <div>
         <div className="container">
@@ -38,7 +62,7 @@ export default class Home extends React.Component {
               <div className="list-container">
                 <ul className="note-list">
                   {
-                    topics.map((d) =>
+                    topics && topics.map((d) =>
                       <li className="list-group-item" key={d.id}>
                         <Link to={`/topic/${d.id}`}>{d.title}</Link>
                       </li>
@@ -52,7 +76,7 @@ export default class Home extends React.Component {
               <div className="list-container">
                 <ul className="note-list">
                   {
-                    collected.map((d) =>
+                    collected && collected.map((d) =>
                       <li className="list-group-item" key={d.id}>
                         <Link to={`/topic/${d.id}`}>{d.title}</Link>
                       </li>
@@ -67,3 +91,6 @@ export default class Home extends React.Component {
     );
   }
 }
+
+// export default connect(stateToProps, dispatchToProps)(Home)
+export default connect(stateToProps, null)(Home)

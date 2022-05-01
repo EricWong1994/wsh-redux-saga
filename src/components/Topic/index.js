@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './index.less';
 
-@connect(({ topic }) =>({
+connect(({ topic }) =>({
   topic,
 }))
 export default class Topic extends React.Component {
